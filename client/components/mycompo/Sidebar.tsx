@@ -15,6 +15,7 @@ const Sidebar = ({
   setIsGenerating,
 }: SiderbarProps) => {
   const messageRef = useRef<HTMLDivElement>(null);
+  const [input, setInput] = React.useState<string>();
 
   const handleRoleBack = async (versionId: string) => {};
 
@@ -26,10 +27,10 @@ const Sidebar = ({
 
   return (
     <>
-      <div className="flex items-end w-120 h-[85vh] bg-slate-900">
-        <div className="w-full h-full">
+      <div className="relative flex items-end w-120 h-full bg-slate-900">
+        <div className="relative w-full h-full">
           {/* message container */}
-          <div className="flex flex-col h-full overflow-auto custom-scrollbar px-3 gap-4">
+          <div className="relative flex flex-col h-full overflow-auto custom-scrollbar px-3 pb-16 gap-4">
             {[...project.conversation, ...project.versions]
               .sort(
                 (a, b) =>
@@ -44,24 +45,24 @@ const Sidebar = ({
                   return (
                     <div
                       key={msg.id}
-                      className={`flex items-start gap-3 ${
+                      className={`flex items-start gap-1.5 ${
                         isUser ? "justify-end" : "justify-start"
                       }`}
                     >
                       {!isUser && (
-                        <div>
+                        <div className="bg-slate-800 p-2 rounded-md">
                           <BotIcon />
                         </div>
                       )}
                       <div
-                        className={`max-w-[80%] px-2 py-1.5 rounded-md ${
+                        className={`max-w-[85%] px-2.5 py-2 my-2 rounded-md ${
                           isUser ? "bg-indigo-600" : "bg-gray-700"
                         }`}
                       >
                         {msg.content}
                       </div>
                       {isUser && (
-                        <div>
+                        <div className="bg-slate-800 p-2 rounded-md">
                           <UserIcon />
                         </div>
                       )}
@@ -70,16 +71,20 @@ const Sidebar = ({
                 } else {
                   const ver = message as Version;
                   return (
-                    <div key={ver.id} className="">
-                      <div>
-                        code updated <br />
+                    <div key={ver.id} className=" p-10 rounded-lg bg-slate-800">
+                      <div >
+                        <span className="font-bold text-2xl">Code updated</span>
+                         <br />
                         <span>{new Date(ver.timestamp).toLocaleString()}</span>
                       </div>
-                      <div>
+                      <div className="flex items-center mt-5 gap-1.5">
                         {project.current_version_index === ver.id ? (
-                          <Button>Current Version</Button>
+                          <Button variant={"indigo"}>Current Version</Button>
                         ) : (
-                          <Button onClick={() => handleRoleBack(ver.id)}>
+                          <Button
+                            onClick={() => handleRoleBack(ver.id)}
+                            variant={"indigo"}
+                          >
                             Roll back to this version
                           </Button>
                         )}
@@ -87,7 +92,9 @@ const Sidebar = ({
                           href={`/preview/${project.id}/${ver.id}`}
                           target="blank"
                         >
-                          <EyeIcon className="size-6" />
+                          <div className="bg-slate-700 hover:bg-slate-600 p-1.5 rounded-lg">
+                            <EyeIcon className="size-6" />
+                          </div>
                         </Link>
                       </div>
                     </div>
@@ -96,7 +103,7 @@ const Sidebar = ({
               })}
             {isGenerating && (
               <div>
-                <div>
+                <div className="bg-slate-700 p-2">
                   <BotIcon />
                 </div>
                 <div className="flex gap-1.5 h-full items-end">
@@ -119,13 +126,18 @@ const Sidebar = ({
           </div>
 
           {/* textarea , sendbtn */}
-          <div className="border-white border w-full flex items-center gap-1.5">
+          <div className="absolute bottom-0 bg-slate-900 px-1 py-2 rounded-t-md w-full flex items-center gap-1.5">
             <Textarea
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+              }}
               placeholder="Type your message here."
               className="resize-none w-full"
+              disabled={isGenerating}
             />
-            <div className="border p-4 rounded-lg">
-              <SendIcon className="size-8" />
+            <div className="border p-4.5 rounded-lg hover:bg-slate-800 hover:border-slate-500">
+              {isGenerating ? <Spinner /> : <SendIcon className="size-8" />}
             </div>
           </div>
         </div>

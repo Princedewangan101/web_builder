@@ -21,12 +21,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  
   return (
     <html lang="en">
       <body className={`${poppins.variable} dark custom-scrollbar antialiased`}>
         <NavbarSwitcher/>    
         {children} 
-        <Footer/>   
+        {/* <Footer/>    */}
       </body>
     </html>
   );

@@ -41,10 +41,36 @@ export interface Project {
 export interface ClientPartOfPricingPageButtonProps {
   planId: string;
 }
+
 export interface SiderbarProps {
   isMenuOpen: boolean;
   project: Project;
   setProject: Dispatch<SetStateAction<Project | null>>;
   isGenerating: boolean;
   setIsGenerating: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface ProjectPreviewProps {
+  isMenuOpen: boolean;
+  project: Project;
+  isGenerating: boolean;
+  device? : "phone" | "tablet" | "desktop";
+  showEditorPanel?: boolean;
+}
+
+export interface EditorPanelProps {
+  selectedElement: {
+    tagName: string;
+    className: string;
+    text: string;
+    styles: {
+      padding: string;
+      margin: string;
+      backgroundColour: string;
+      color: string;
+      fontSize: string;
+    };
+  } | null;
+  onUpdate: (update: any) => void;
+  onClose: () => void;
 }
