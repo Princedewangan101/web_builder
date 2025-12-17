@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/mycompo/Navbar";
 import Footer from "@/components/mycompo/Footer";
 import NavbarSwitcher from "@/components/mycompo/NavbarSwitcher";
+import { Toaster } from "@/components/ui/sonner";
+import { Providers } from "./providers";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -21,14 +23,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  
   return (
     <html lang="en">
       <body className={`${poppins.variable} dark custom-scrollbar antialiased`}>
-        <NavbarSwitcher/>    
-        {children} 
-        {/* <Footer/>    */}
+        <Providers>
+          <NavbarSwitcher />
+          {children}
+          <Toaster />
+          {/* <Footer/>    */}
+        </Providers>
       </body>
     </html>
   );

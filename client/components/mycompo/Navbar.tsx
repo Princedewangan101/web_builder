@@ -1,18 +1,23 @@
 "use client";
 
+import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import React from "react";
+import { UserButton } from "@daveyplate/better-auth-ui";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
+  const { data: session } = useSession();
 
   return (
     <>
       {/* NAVBAR */}
       <nav className="z-50 flex items-center justify-between w-full py-4 px-4 md:px-16 lg:px-24 xl:px-32 backdrop-blur border-b text-white border-slate-800">
         {/* Logo */}
-        <Link href="/" >
-            <h3>Build.<span className="text-[#4f39f6]">web</span></h3>
+        <Link href="/">
+          <h3>
+            Build.<span className="text-[#4f39f6]">web</span>
+          </h3>
         </Link>
 
         {/* Desktop Menu */}
@@ -33,12 +38,15 @@ const Navbar = () => {
 
         {/* Auth Buttons */}
         <div className="hidden md:block space-x-3">
-          <button className="active:scale-95 hover:bg-indigo-600/20 transition px-4 py-2 border border-indigo-600 rounded-md">
-            Sign in
-          </button>
-          <button className="px-6 py-2 bg-indigo-600 active:scale-95 hover:bg-indigo-700 transition rounded-md">
-            Get started
-          </button>
+          {!session?.user ? (
+            <Link href="/auth/sign-up">
+              <button className="px-6 py-2 bg-indigo-600 active:scale-95 hover:bg-indigo-700 transition rounded-md">
+                Get started
+              </button>
+            </Link>
+          ) : (
+            <UserButton size="icon" />
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -56,7 +64,7 @@ const Navbar = () => {
 
       {/* MOBILE OVERLAY MENU */}
       {menuOpen && (
-        <div className="fixed inset-0 z-[100] bg-black/60 text-white backdrop-blur flex flex-col items-center justify-center text-lg gap-8 md:hidden">
+        <div className="fixed inset-0 z-100 bg-black/60 text-white backdrop-blur flex flex-col items-center justify-center text-lg gap-8 md:hidden">
           <Link href="#products" onClick={() => setMenuOpen(false)}>
             Products
           </Link>
